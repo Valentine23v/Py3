@@ -10,7 +10,7 @@ def power(x, n):
         n = n - 1
         s = s * x
     return s
-print(pow(2,3))
+print(power(2,3))
 
 #默认参数
 def powerdefault(x, n=2):
@@ -66,3 +66,12 @@ nums=[1,2,3,4]
 print(calcu(*nums))
 
 #关键字参数
+
+#可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple
+def person(name, age, **kw):
+    print('name:', name, 'age:', age, 'other:', kw)
+
+person('Michael', 30)
+#函数person除了必选参数name和age外，还接受关键字参数kw。在调用该函数时，可以只传入必选参数
+person('Bob', 35, city='Beijing')
+person('Adam', 45, gender='M', job='Engineer')
