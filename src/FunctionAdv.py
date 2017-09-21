@@ -75,3 +75,25 @@ person('Michael', 30)
 #函数person除了必选参数name和age外，还接受关键字参数kw。在调用该函数时，可以只传入必选参数
 person('Bob', 35, city='Beijing')
 person('Adam', 45, gender='M', job='Engineer')
+
+#命名关键字参数
+
+#对于关键字参数，函数的调用者可以传入任意不受限制的关键字参数。至于到底传入了哪些，就需要在函数内部通过kw检查。
+#仍以person()函数为例，我们希望检查是否有city和job参数：
+def personcheck(name, age, **kw):
+    if 'city' in kw:
+        # 有city参数
+        pass
+    if 'job' in kw:
+        # 有job参数
+        pass
+    print('name:', name, 'age:', age, 'other:', kw)
+
+person('Jack', 24, city='Beijing', addr='Chaoyang', zipcode=123456)
+
+#如果要限制关键字参数的名字，就可以用命名关键字参数
+#和关键字参数**kw不同，命名关键字参数需要一个特殊分隔符*，*后面的参数被视为命名关键字参数。
+#def personck(name, age, *,city, job):
+#    print(name, age, city, job)
+    
+#personck('Jack', 24, 'Beijing', 'Engineer')
