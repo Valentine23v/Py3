@@ -54,16 +54,16 @@ class Bat(Mammal, Flyable):
 # Python自带的很多库也使用了MixIn。举个例子，Python自带了TCPServer和UDPServer这两类网络服务，而要同时服务多个用户就必须使用多进程或多线程模型，这两种模型由ForkingMixIn和ThreadingMixIn提供。通过组合，我们就可以创造出合适的服务来。
 # 比如，编写一个多进程模式的TCP服务，定义如下：
 
-class MyTCPServer(TCPServer, ForkingMixIn):
-    pass
+# class MyTCPServer(TCPServer, ForkingMixIn):
+#     pass
 # 编写一个多线程模式的UDP服务，定义如下：
-
-class MyUDPServer(UDPServer, ThreadingMixIn):
-    pass
+#
+# class MyUDPServer(UDPServer, ThreadingMixIn):
+#     pass
 # 如果你打算搞一个更先进的协程模型，可以编写一个CoroutineMixIn：
-
-class MyTCPServer(TCPServer, CoroutineMixIn):
-    pass
+#
+# class MyTCPServer(TCPServer, CoroutineMixIn):
+#     pass
 # 这样一来，我们不需要复杂而庞大的继承链，只要选择组合不同的类的功能，就可以快速构造出所需的子类。
 
 # 小结
