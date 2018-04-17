@@ -98,7 +98,7 @@ print(f3[0:5])
 # 正常情况下，当我们调用类的方法或属性时，如果不存在，就会报错。
 # 要避免这个错误，除了可以加上一个score属性外，Python还有另一个机制，那就是写一个__getattr__()方法，动态返回一个属性。
 
-class Student(object):
+class StudentA(object):
 
     def __init__(self):
         self.name = 'Michael'
@@ -111,4 +111,58 @@ class Student(object):
         if attr=='age':
             return lambda :25
 
+# 调用方式要变为
+s1 = StudentA()
+print(s1.age())
 
+# 只有在没有找到属性的情况下，才调用__getattr__，已有的属性，比如name，不会在__getattr__中查找。
+#此外，注意到任意调用如s.abc都会返回None，这是因为我们定义的__getattr__默认返回就是None。要让class只响应特定的几个属性，我们就要按照约定，抛出AttributeError的错误：
+
+class StudentB(object):
+
+    def __getattr__(self, attr):
+        if attr=='age':
+            return lambda: 25
+        raise AttributeError('\'Student\' object has no attribute \'%s\'' % attr)
+# 这实际上可以把一个类的所有属性和方法调用全部动态化处理了，不需要任何特殊手段。
+# 这种完全动态调用的特性有什么实际作用呢？作用就是，可以针对完全动态的情况作调用。
+
+# 利用完全动态的__getattr__，我们可以写出一个链式调用：
+
+class Chain(object):
+
+    def __init__(self, path=''):
+        self._path = path
+
+    def __getattr__(self, path):
+        return Chain('%s/%s' % (self._path, path))
+
+    def __str__(self):
+        return self._path
+
+    __repr__ = __str__
+
+
+print(Chain().status.user.timeline.list)
+# 这样，无论API怎么变，SDK都可以根据URL实现完全动态的调用，而且，不随API的增加而改变！
+
+# __call__
+
+# 一个对象实例可以有自己的属性和方法，当我们调用实例方法时，我们用instance.method()来调用。
+# 任何类，只需要定义一个__call__()方法，就可以直接对实例进行调用
+
+class StudentC(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __call__(self):
+        print('My name is %s.' % self.name)
+
+c = StudentC('StudentC')
+c() # self参数不要传入
+
+# __call__()还可以定义参数。对实例进行直接调用就好比对一个函数进行调用一样，所以你完全可以把对象看成函数，把函数看成对象，因为这两者之间本来就没啥根本的区别。
+# 如果你把对象看成函数，那么函数本身其实也可以在运行期动态创建出来，因为类的实例都是运行期创建出来的，这么一来，我们就模糊了对象和函数的界限。
+# 那么，怎么判断一个变量是对象还是函数呢？其实，更多的时候，我们需要判断一个对象是否能被调用，能被调用的对象就是一个Callable对象，比如函数和我们上面定义的带有__call__()的类实例：
+
+print(callable(Student('A')),callable(max),callable([1, 2, 3]),callable('str'))
