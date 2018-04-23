@@ -103,12 +103,12 @@ u = User(id=12345, name='Michael', email='test@orm.org', password='my-pwd')
 u.save()
 
 
-
-
-
-
-
-
-
-
-
+# 输出如下：
+# Found model: User
+# Found mapping: email ==> <StringField:email>
+# Found mapping: password ==> <StringField:password>
+# Found mapping: id ==> <IntegerField:uid>
+# Found mapping: name ==> <StringField:username>
+# SQL: insert into User (password,email,username,id) values (?,?,?,?)
+# ARGS: ['my-pwd', 'test@orm.org', 'Michael', 12345]
+# 可以看到，save()方法已经打印出了可执行的SQL语句，以及参数列表，只需要真正连接到数据库，执行该SQL语句，就可以完成真正的功能。
